@@ -1,9 +1,10 @@
 
 from handler import BaseHandler
-from control import ctrl
+from control.index import get_index_content
 
 
 class IndexHandler(BaseHandler):
 
     def get(self):
-        self.write('hello world!')
+        res = get_index_content()
+        self.write(res)
