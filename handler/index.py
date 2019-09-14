@@ -7,4 +7,4 @@ class IndexHandler(BaseHandler):
 
     def get(self):
         res = get_index_content()
-        self.write(res)
+        self.send_json(res)
