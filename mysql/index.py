@@ -4,4 +4,5 @@ from mysql.models import Test
 
 
 def get_content():
-    return session.query(Test).all()
+    res = session.query(Test).all()[0]
+    return res.content
