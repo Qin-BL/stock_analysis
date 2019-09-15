@@ -21,7 +21,7 @@ else:
     from settings import *
 
 urls = [
-    (r'/index', 'handler.index.IndexHandler'),
+    (r'/(index|all|one)?', 'handler.index.IndexHandler'),
 ]
 
 
