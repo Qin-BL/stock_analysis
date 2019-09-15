@@ -10,6 +10,8 @@ class IndexHandler(BaseHandler):
             res = get_index_content()
             self.send_json(res)
         if op == 'all':
-            self.send_json(get_all_content())
+            res = get_all_content()
+            self.send_json(res)
         if op == 'one':
-            self.send_json(get_one_content())
+            res = get_one_content()
+            self.send_json(res)
