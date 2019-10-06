@@ -30,7 +30,7 @@ class PreAnalysisStocks(Base):
 
     """待分析股票表"""
 
-    __tablename__ = 'test'
+    __tablename__ = 'pre_analysis_stocks'
 
     code = Column(Integer, primary_key=True, comment='股票代码')
     name = Column(VARCHAR(128), nullable=False, comment='股票名称')
