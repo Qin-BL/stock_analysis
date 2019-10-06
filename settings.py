@@ -22,7 +22,8 @@ mysql_master = {
     'password': 'qinbilei888',
     'host': '127.0.0.1',
     'port': 3306,
-    'db': 'test'
+    # 'db': 'test'
+    'db': 'stock'
 }
 
 # 请放在结尾
