@@ -32,7 +32,8 @@ class PreAnalysisStocks(Base):
 
     __tablename__ = 'pre_analysis_stocks'
 
-    code = Column(Integer, primary_key=True, comment='股票代码')
+    id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
+    code = Column(VARCHAR(128), comment='股票代码')
     name = Column(VARCHAR(128), nullable=False, comment='股票名称')
     detials = Column(VARCHAR(512), nullable=False, comment='变动摘要')
     extent = Column(VARCHAR(128), nullable=False, comment='变化幅度')
@@ -47,7 +48,8 @@ class AnalysisedStocks(Base):
 
     __tablename__ = 'analysised_stocks'
 
-    code = Column(Integer, primary_key=True, comment='股票代码')
+    id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
+    code = Column(VARCHAR(128), comment='股票代码')
     name = Column(VARCHAR(128), nullable=False, comment='股票名称')
     detials = Column(VARCHAR(512), nullable=False, comment='变动摘要')
     extent = Column(VARCHAR(128), nullable=False, comment='变化幅度')
@@ -57,4 +59,5 @@ class AnalysisedStocks(Base):
 
 # 创建表
 Base.metadata.create_all(engine)
+
 
