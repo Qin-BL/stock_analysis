@@ -5,12 +5,11 @@ from tornado.options import options, define
 define('port', default=8888)
 define('debug', default=False)
 options.parse_command_line()
-import datetime, time
+import datetime, time, random
 import requests
 from lxml import etree
 from mysql.stock import multi_add
 from mysql.models import PreAnalysisStocks
-
 
 
 page_url = 'http://data.10jqka.com.cn/ajax/yjyg/date/%s/board/ALL/field/enddate/order/desc/page/%s/ajax/1/free/1/'
@@ -19,6 +18,7 @@ header = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
     'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma'
 }
+# proxies = {"http": ""}
 page = 1
 data = []
 
@@ -28,17 +28,12 @@ yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(day
 singal = True
 
 while singal:
-    res = requests.get(page_url % (today, page), headers=header)
+    res = requests.get(page_url % ('2019-09-30', page), headers=header)
     html = etree.HTML(res.content.decode('gbk'))
     tr_list = html.xpath('/html/body/table/tbody/tr')
     if len(tr_list) == 0:
-        if page == 1:
-            today = yesterday.strftime('%Y-%m-%d')
-            yesterday = datetime.datetime.strptime(today, '%Y-%m-%d') - datetime.timedelta(days=1)
-            continue
-        else:
-            multi_add(PreAnalysisStocks, data)
-            break
+        multi_add(PreAnalysisStocks, data)
+        break
     for tr in tr_list:
         tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
         tmp_day = datetime.datetime.strptime(tmp[-1], '%Y-%m-%d')
@@ -58,6 +53,6 @@ while singal:
             multi_add(PreAnalysisStocks, data)
             data = []
     page += 1
-    time.sleep(2)
+    time.sleep(random.choice(range(2, 5)))
 
 
