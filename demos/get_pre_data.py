@@ -43,8 +43,10 @@ while singal:
             'name': tmp[2],
             'detials': tmp[4],
             'extent': tmp[5],
+            'notice_time': tmp[-1],
             'status': 1
         })
         if len(data) > 100:
             multi_add(PreAnalysisStocks, data)
             data = []
+

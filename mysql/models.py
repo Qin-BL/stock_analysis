@@ -37,6 +37,7 @@ class PreAnalysisStocks(Base):
     detials = Column(VARCHAR(512), nullable=False, comment='变动摘要')
     extent = Column(VARCHAR(128), nullable=False, comment='变化幅度')
     status = Column(Integer, default=1, comment='0是分析过的， 1是新加的 ，添加之前先把之前的设置为0，然后添加，添加后删除掉0的数据')
+    notice_time = Column(VARCHAR(128), nullable=False, comment='公告时间')
     update_time = Column(DateTime, server_default=func.now(), onupdate=func.now(), comment="加入时间")
 
 
@@ -50,8 +51,10 @@ class AnalysisedStocks(Base):
     name = Column(VARCHAR(128), nullable=False, comment='股票名称')
     detials = Column(VARCHAR(512), nullable=False, comment='变动摘要')
     extent = Column(VARCHAR(128), nullable=False, comment='变化幅度')
+    notice_time = Column(VARCHAR(128), nullable=False, comment='公告时间')
     update_time = Column(DateTime, server_default=func.now(), onupdate=func.now(), comment="加入时间")
 
 
 # 创建表
 Base.metadata.create_all(engine)
+
