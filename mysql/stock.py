@@ -20,10 +20,8 @@ def get_one():
 
 
 def multi_add(name, obj_list):
-    session.execute(
-        name.__table__.replace(),
-        obj_list
-    )
+    for i in obj_list:
+        session.merge(name(**i))
     return session.commit()
 
 
@@ -35,3 +33,4 @@ def update_pre_data():
 def del_pre_data():
     session.query(PreAnalysisStocks).filter_by(status=0).delete()
     session.commit()
+
