@@ -5,7 +5,7 @@ from tornado.options import options, define
 define('port', default=8888)
 define('debug', default=False)
 options.parse_command_line()
-import datetime
+import datetime, time
 import requests
 from lxml import etree
 from mysql.stock import multi_add
@@ -49,4 +49,6 @@ while singal:
         if len(data) > 100:
             multi_add(PreAnalysisStocks, data)
             data = []
+    page += 1
+    time.sleep(2)
 
