@@ -31,6 +31,9 @@ while singal:
     res = requests.get(page_url % (today, page), headers=header)
     html = etree.HTML(res.content.decode('gbk'))
     tr_list = html.xpath('/html/body/table/tbody/tr')
+    if len(tr_list) == 0:
+        multi_add(PreAnalysisStocks, data)
+        break
     for tr in tr_list:
         tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
         tmp_day = datetime.datetime.strptime(tmp[-1], '%Y-%m-%d')
