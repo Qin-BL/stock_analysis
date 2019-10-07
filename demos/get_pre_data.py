@@ -1,15 +1,16 @@
 import os
 import sys
 sys.path.append(os.getcwd())
-import time, datetime
-import requests
-from lxml import etree
-from mysql.stock import multi_add
-from mysql.models import PreAnalysisStocks
 from tornado.options import options, define
 define('port', default=8888)
 define('debug', default=False)
 options.parse_command_line()
+import datetime
+import requests
+from lxml import etree
+from mysql.stock import multi_add
+from mysql.models import PreAnalysisStocks
+
 
 
 page_url = 'http://data.10jqka.com.cn/ajax/yjyg/date/%s/board/ALL/field/enddate/order/desc/page/%s/ajax/1/free/1/'
