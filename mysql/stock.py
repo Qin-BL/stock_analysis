@@ -21,7 +21,7 @@ def get_one():
 
 def multi_add(name, obj_list):
     session.execute(
-        name.__table__.insert(),
+        name.__table__.replace(),
         obj_list
     )
     return session.commit()
