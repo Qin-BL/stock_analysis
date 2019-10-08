@@ -1,3 +1,6 @@
+"""
+每天拿到业绩预告数据，数据源是同花顺，url的日期是03-30，06-30，09-30，12-30
+"""
 import os
 import sys
 sys.path.append(os.getcwd())
@@ -10,6 +13,7 @@ import requests
 from lxml import etree
 from mysql.stock import multi_add
 from mysql.models import PreAnalysisStocks
+import logging
 
 
 page_url = 'http://data.10jqka.com.cn/ajax/yjyg/date/%s/board/ALL/field/enddate/order/desc/page/%s/ajax/1/free/1/'
@@ -26,11 +30,14 @@ index_html = etree.HTML(requests.get(index_url, headers=header).content.decode('
 today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
 yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
 singal = True
+logging.info(today)
 
 while singal:
     res = requests.get(page_url % ('2019-09-30', page), headers=header)
     html = etree.HTML(res.content.decode('gbk'))
     tr_list = html.xpath('/html/body/table/tbody/tr')
+    logging.info(page_url % ('2019-09-30', page))
+    logging.info(len(tr_list))
     if len(tr_list) == 0:
         multi_add(PreAnalysisStocks, data)
         break
