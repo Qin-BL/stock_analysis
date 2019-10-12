@@ -11,7 +11,7 @@ define('port', default=8888)
 define('debug', default=False)
 options.parse_command_line()
 
-import datetime, time, random
+import time, random, logging
 import requests
 from mysql.stock import get_all_pre_data, multi_add, del_pre_data
 from mysql.models import AnalysisedStocks
@@ -44,8 +44,8 @@ for i in all_data:
     try:
         last_price = get_last_price(code)
     except Exception as e:
-        print(code)
-        print(e)
+        logging.error(code)
+        logging.error(e)
         del_pre_data(i['id'])
         continue
     if last_price['mini_price'] > last_price['yes_finish_price']:
