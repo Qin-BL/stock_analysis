@@ -41,6 +41,7 @@ all_data = get_all_pre_data()
 res_data = []
 for i in all_data:
     code = i['code']
+    logging.info(code)
     try:
         last_price = get_last_price(code)
     except Exception as e:
