@@ -26,7 +26,8 @@ header = {
 
 
 def get_last_price(code):
-    res = eval(requests.get(url % code, headers=header).content.decode().split('quotebridge_v2_realhead_hs_000962_last(')[-1][:-1])
+    data = requests.get(url % code, headers=header).content.decode()
+    res = eval(data.split('quotebridge_v2_realhead_hs_000962_last(')[-1][:-1])
     return {
         'heighest_price': res['items']['8'],
         'mini_price': res['items']['9'],
