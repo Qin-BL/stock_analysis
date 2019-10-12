@@ -46,6 +46,7 @@ for i in all_data:
     except Exception as e:
         print(code)
         print(e)
+        del_pre_data(i['id'])
         continue
     if last_price['mini_price'] > last_price['yes_finish_price']:
         res_data.append({
