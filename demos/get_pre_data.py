@@ -49,7 +49,7 @@ while singal:
             singal = False
             break
         data.append({
-            'code': int(tmp[1]),
+            'code': tmp[1],
             'name': tmp[2],
             'detials': tmp[4],
             'extent': tmp[5],
