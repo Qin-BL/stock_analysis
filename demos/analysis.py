@@ -50,5 +50,6 @@ for i in all_data:
             'mark': 0,
             'notice_time': i['notice_time']
         })
+    time.sleep(random.choice(range(2, 6)))
     del_pre_data(i['id'])
 multi_add(AnalysisedStocks, res_data)
