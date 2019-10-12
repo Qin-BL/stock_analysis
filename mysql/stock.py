@@ -30,7 +30,11 @@ def update_pre_data():
     session.commit()
 
 
-def del_pre_data():
-    session.query(PreAnalysisStocks).filter_by(status=0).delete()
+def del_pre_data(id):
+    session.query(PreAnalysisStocks).filter_by(id=id).delete()
     session.commit()
 
+
+@model_to_list
+def get_all_pre_data():
+    return session.query(PreAnalysisStocks).all()
