@@ -50,5 +50,5 @@ for i in all_data:
             'mark': 0,
             'notice_time': i['notice_time']
         })
-    # del_pre_data(i['id'])
+    del_pre_data(i['id'])
 multi_add(AnalysisedStocks, res_data)
