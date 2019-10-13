@@ -49,6 +49,13 @@ for i in all_data:
         logging.error(e)
         del_pre_data(i['id'])
         continue
+    try:
+       float(last_price['mini_price'])
+       float(last_price['yes_finish_price'])
+    except:
+       logging.error(last_price['mini_price'])
+       logging.error(last_price['yes_finish_price'])
+       continue
     if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
         res_data.append({
             'code': code,
