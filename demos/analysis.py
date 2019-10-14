@@ -70,4 +70,4 @@ for i in all_data:
     del_pre_data(i['id'])
 logging.warning('finish,all is %d'%len(res_data))
 multi_add(AnalysisedStocks, res_data)
-mail('\n'.join(['股票代码:%s，股票名称:%s；'%(i['code'], i['name']) for i in res_data]))
+mail('\n'.join(['股票代码:%s，股票名称:%s；'%(i['code'], i['name']) for i in list(set(res_data))]))
