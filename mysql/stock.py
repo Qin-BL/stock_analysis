@@ -38,3 +38,9 @@ def del_pre_data(id):
 @model_to_list
 def get_all_pre_data():
     return session.query(PreAnalysisStocks).all()
+
+
+def del_all_pre_data():
+    session.query(PreAnalysisStocks).all().delete()
+    session.commit()
+
