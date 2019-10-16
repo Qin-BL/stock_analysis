@@ -41,6 +41,6 @@ def get_all_pre_data():
 
 
 def del_all_pre_data():
-    session.query(PreAnalysisStocks).all().delete()
+    session.excute('truncate table pre_analysis_stocks;')
     session.commit()
 

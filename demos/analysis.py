@@ -39,9 +39,12 @@ def get_last_price(code):
 
 all_data = get_all_pre_data()
 res_data = []
+res_set = set()
 for i in all_data:
     code = i['code']
     logging.info(code)
+    if code in res_set:
+        continue
     try:
         last_price = get_last_price(code)
     except Exception as e:
@@ -65,9 +68,9 @@ for i in all_data:
             'mark': 0,
             'notice_time': i['notice_time']
         })
-        del_pre_data(i['id'])
     time.sleep(random.choice(range(2, 6)))
-    del_pre_data(i['id'])
+    res_set.add(code)
 logging.warning('finish,all is %d'%len(res_data))
 multi_add(AnalysisedStocks, res_data)
 mail('\n'.join(['股票代码:%s，股票名称:%s；'%(i['code'], i['name']) for i in list(set(res_data))]))
+del_all_pre_data()
