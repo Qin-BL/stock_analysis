@@ -156,7 +156,7 @@ for i in all_data:
     res_set.add(code)
 logging.warning('finish,all is %d' % len(data_jump))
 multi_add(AnalysisedStocks, data_jump)
-res = '\n'.join(['跳空：\n%s，%s；' % (i['code'], i['name']) for i in data_jump]) + \
-      '\n'.join(['上涨：\n%s，%s；' % (i['code'], i['name']) for i in data_up])
+res = '跳空：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_jump]) + \
+      '上涨：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_up])
 mail(res)
 del_all_pre_data()
