@@ -128,6 +128,7 @@ for i in all_data:
         continue
     try:
        float(last_price['mini_price'])
+       float(last_price['finish_price'])
        float(last_price['yes_finish_price'])
     except:
        logging.error(last_price['mini_price'])
@@ -141,8 +142,10 @@ for i in all_data:
             'detials': i['detials'],
             'extent': i['extent'],
             'mark': 0,
-            'notice_time': i['notice_time']
+            'notice_time': i['notice_time'],
+            "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(last_price['yes_finish_price'])
         })
+        continue
     if float(last_price['finish_price']) > float(last_price['yes_finish_price']):
         data_up.append({
             'code': code,
@@ -150,12 +153,15 @@ for i in all_data:
             'detials': i['detials'],
             'extent': i['extent'],
             'mark': 0,
-            'notice_time': i['notice_time']
+            'notice_time': i['notice_time'],
+            "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(last_price['yes_finish_price'])
         })
     time.sleep(random.choice(range(2, 6)))
     res_set.add(code)
 logging.warning('finish,all is %d' % len(data_jump))
-multi_add(AnalysisedStocks, data_jump)
+# multi_add(AnalysisedStocks, data_jump)
+data_jump.sort(key=lambda x: x["range"], reverse=True)
+data_up.sort(key=lambda x: x["range"], reverse=True)
 res = '跳空：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_jump]) + \
       '\n上涨：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_up])
 mail(res)
