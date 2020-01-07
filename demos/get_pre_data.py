@@ -40,7 +40,7 @@ for v in versions:
         res = requests.get(yjyg_url % (version, page), headers=header)
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
-        logging.info(yjyg_url % ('2019-09-30', page))
+        logging.info(yjyg_url % (version, page))
         logging.info(len(tr_list))
         if len(tr_list) == 0:
             multi_add(PreAnalysisStocks, data)
@@ -73,7 +73,7 @@ for v in versions:
         res = requests.get(yjgg_url % (version, page), headers=header)
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
-        logging.info(yjgg_url % ('2019-09-30', page))
+        logging.info(yjgg_url % (version, page))
         logging.info(len(tr_list))
         if len(tr_list) == 0:
             multi_add(PreAnalysisStocks, data)
