@@ -22,8 +22,9 @@ header = {
 }
 
 # proxies = []
-versions = ['%s-03-31', '%s-06-30', '%s-09-30', '%s-12-31']
-for i in range(2):
+# versions = ['%s-03-31', '%s-06-30', '%s-09-30', '%s-12-31']
+versions = ['%s-12-31']
+for i in range(1, 2):
     for v in versions:
         this_year = str(int(time.strftime('%Y'))-i)
         version = v % this_year
@@ -48,6 +49,7 @@ for i in range(2):
             logging.info(len(tr_list))
             if len(tr_list) == 0:
                 multi_add(PreAnalysisStocks, data)
+                logging.info(res.text)
                 break
             for tr in tr_list:
                 tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
@@ -82,6 +84,7 @@ for i in range(2):
             logging.info(len(tr_list))
             if len(tr_list) == 0:
                 multi_add(PreAnalysisStocks, data)
+                logging.info(res.text)
                 break
             for tr in tr_list:
                 tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
