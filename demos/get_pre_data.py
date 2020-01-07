@@ -23,23 +23,25 @@ header = {
 
 # proxies = []
 versions = ['%s-03-31', '%s-06-30', '%s-09-30', '%s-12-31']
-for v in versions:
-    for i in range(2):
+for i in range(2):
+    for v in versions:
         this_year = str(int(time.strftime('%Y'))-i)
         version = v % this_year
         now = datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
-        if now > datetime.datetime.strptime(version, '%Y-%m-%d'): continue
+        # if now > datetime.datetime.strptime(version, '%Y-%m-%d'): continue
         page = 1
         data = []
         singal = True
-    
+
         index_html = etree.HTML(requests.get(index_url, headers=header).content.decode('gbk'))
+        time.sleep(random.choice(range(1, 6)))
         today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
         yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
         logging.info(today)
-    
+
         while singal:
             res = requests.get(yjyg_url % (version, page), headers=header)
+            time.sleep(random.choice(range(1, 6)))
             html = etree.HTML(res.content.decode('gbk'))
             tr_list = html.xpath('/html/body/table/tbody/tr')
             logging.info(yjyg_url % (version, page))
@@ -67,12 +69,13 @@ for v in versions:
                     data = []
             page += 1
             time.sleep(random.choice(range(2, 5)))
-    
+
         page = 1
         singal = True
         data = []
         while singal:
             res = requests.get(yjgg_url % (version, page), headers=header)
+            time.sleep(random.choice(range(1, 6)))
             html = etree.HTML(res.content.decode('gbk'))
             tr_list = html.xpath('/html/body/table/tbody/tr')
             logging.info(yjgg_url % (version, page))
