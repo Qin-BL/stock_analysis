@@ -22,18 +22,18 @@ header = {
 }
 
 # proxies = []
-versions = ['%s-03-31', '%s-06-30', '%s-09-30', '%s-12-31']
+versions = []
 this_year = time.strftime('%Y')
-this_mouth = time.strftime('%Y')
+this_mouth = time.strftime('%m')
 if int(this_mouth) <= 3:
-    versions = ['%s-12-31' % str(int(this_year)-1), '%s-03-31' % this_year]
+    versions = ['%s-12-31' % str(int(this_year) - 1), '%s-03-31' % this_year]
 elif 3 < int(this_mouth) <= 6:
     versions = ['%s-12-31' % str(int(this_year) - 1), '%s-03-31' % this_year, '%s-06-30' % this_year]
 elif 6 < int(this_mouth) <= 9:
     versions = ['%s-06-30' % this_year, '%s-09-30' % this_year]
 else:
     versions = ['%s-09-30' % this_year, '%s-12-31' % this_year]
-    
+logging.info(versions)
 for version in versions:
     now = datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
     # if now > datetime.datetime.strptime(version, '%Y-%m-%d'): continue
@@ -113,5 +113,4 @@ for version in versions:
                 data = []
         page += 1
         time.sleep(random.choice(range(2, 5)))
-
 
