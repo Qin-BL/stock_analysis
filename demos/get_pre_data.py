@@ -22,89 +22,96 @@ header = {
 }
 
 # proxies = []
-# versions = ['%s-03-31', '%s-06-30', '%s-09-30', '%s-12-31']
-versions = ['%s-12-31']
-for i in range(1, 2):
-    for v in versions:
-        this_year = str(int(time.strftime('%Y'))-i)
-        version = v % this_year
-        now = datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
-        # if now > datetime.datetime.strptime(version, '%Y-%m-%d'): continue
-        page = 1
-        data = []
-        singal = True
+versions = ['%s-03-31', '%s-06-30', '%s-09-30', '%s-12-31']
+this_year = time.strftime('%Y')
+this_mouth = time.strftime('%Y')
+if int(this_mouth) <= 3:
+    versions = ['%s-12-31' % str(int(this_year)-1), '%s-03-31' % this_year]
+elif 3 < int(this_mouth) <= 6:
+    versions = ['%s-12-31' % str(int(this_year) - 1), '%s-03-31' % this_year, '%s-06-30' % this_year]
+elif 6 < int(this_mouth) <= 9:
+    versions = ['%s-06-30' % this_year, '%s-09-30' % this_year]
+else:
+    versions = ['%s-09-30' % this_year, '%s-12-31' % this_year]
+    
+for version in versions:
+    now = datetime.datetime.strptime(time.strftime('%Y-%m-%d'), '%Y-%m-%d')
+    # if now > datetime.datetime.strptime(version, '%Y-%m-%d'): continue
+    page = 1
+    data = []
+    singal = True
 
-        index_html = etree.HTML(requests.get(index_url, headers=header).content.decode('gbk'))
+    index_html = etree.HTML(requests.get(index_url, headers=header).content.decode('gbk'))
+    time.sleep(random.choice(range(1, 6)))
+    today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
+    yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
+    logging.info(today)
+
+    while singal:
+        res = requests.get(yjyg_url % (version, page), headers=header)
         time.sleep(random.choice(range(1, 6)))
-        today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
-        yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
-        logging.info(today)
-
-        while singal:
-            res = requests.get(yjyg_url % (version, page), headers=header)
-            time.sleep(random.choice(range(1, 6)))
-            html = etree.HTML(res.content.decode('gbk'))
-            tr_list = html.xpath('/html/body/table/tbody/tr')
-            logging.info(yjyg_url % (version, page))
-            logging.info(len(tr_list))
-            if len(tr_list) == 0:
+        html = etree.HTML(res.content.decode('gbk'))
+        tr_list = html.xpath('/html/body/table/tbody/tr')
+        logging.info(yjyg_url % (version, page))
+        logging.info(len(tr_list))
+        if len(tr_list) == 0:
+            multi_add(PreAnalysisStocks, data)
+            logging.info(res.text)
+            break
+        for tr in tr_list:
+            tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
+            tmp_day = datetime.datetime.strptime(tmp[-1], '%Y-%m-%d')
+            if tmp_day < yesterday:
                 multi_add(PreAnalysisStocks, data)
-                logging.info(res.text)
+                singal = False
                 break
-            for tr in tr_list:
-                tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
-                tmp_day = datetime.datetime.strptime(tmp[-1], '%Y-%m-%d')
-                if tmp_day < yesterday:
-                    multi_add(PreAnalysisStocks, data)
-                    singal = False
-                    break
-                data.append({
-                    'code': tmp[1],
-                    'name': tmp[2],
-                    'detials': tmp[4],
-                    'extent': tmp[5],
-                    'notice_time': tmp[-1],
-                    'status': 1
-                })
-                if len(data) > 100:
-                    multi_add(PreAnalysisStocks, data)
-                    data = []
-            page += 1
-            time.sleep(random.choice(range(2, 5)))
-
-        page = 1
-        singal = True
-        data = []
-        while singal:
-            res = requests.get(yjgg_url % (version, page), headers=header)
-            time.sleep(random.choice(range(1, 6)))
-            html = etree.HTML(res.content.decode('gbk'))
-            tr_list = html.xpath('/html/body/table/tbody/tr')
-            logging.info(yjgg_url % (version, page))
-            logging.info(len(tr_list))
-            if len(tr_list) == 0:
+            data.append({
+                'code': tmp[1],
+                'name': tmp[2],
+                'detials': tmp[4],
+                'extent': tmp[5],
+                'notice_time': tmp[-1],
+                'status': 1
+            })
+            if len(data) > 100:
                 multi_add(PreAnalysisStocks, data)
-                logging.info(res.text)
+                data = []
+        page += 1
+        time.sleep(random.choice(range(2, 5)))
+
+    page = 1
+    singal = True
+    data = []
+    while singal:
+        res = requests.get(yjgg_url % (version, page), headers=header)
+        time.sleep(random.choice(range(1, 6)))
+        html = etree.HTML(res.content.decode('gbk'))
+        tr_list = html.xpath('/html/body/table/tbody/tr')
+        logging.info(yjgg_url % (version, page))
+        logging.info(len(tr_list))
+        if len(tr_list) == 0:
+            multi_add(PreAnalysisStocks, data)
+            logging.info(res.text)
+            break
+        for tr in tr_list:
+            tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
+            tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
+            if tmp_day < yesterday:
+                multi_add(PreAnalysisStocks, data)
+                singal = False
                 break
-            for tr in tr_list:
-                tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
-                tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
-                if tmp_day < yesterday:
-                    multi_add(PreAnalysisStocks, data)
-                    singal = False
-                    break
-                data.append({
-                    'code': tmp[1],
-                    'name': tmp[2],
-                    'detials': '',
-                    'extent': tmp[8],
-                    'notice_time': tmp[3],
-                    'status': 1
-                })
-                if len(data) > 100:
-                    multi_add(PreAnalysisStocks, data)
-                    data = []
-            page += 1
-            time.sleep(random.choice(range(2, 5)))
+            data.append({
+                'code': tmp[1],
+                'name': tmp[2],
+                'detials': '',
+                'extent': tmp[8],
+                'notice_time': tmp[3],
+                'status': 1
+            })
+            if len(data) > 100:
+                multi_add(PreAnalysisStocks, data)
+                data = []
+        page += 1
+        time.sleep(random.choice(range(2, 5)))
 
 
