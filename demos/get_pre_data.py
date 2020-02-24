@@ -43,14 +43,14 @@ for version in versions:
     singal = True
 
     index_html = etree.HTML(requests.get(index_url, headers=header).content.decode('gbk'))
-    time.sleep(random.choice(range(1, 6)))
+    time.sleep(random.choice(range(3, 8)))
     today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
     yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
     logging.info(today)
 
     while singal:
         res = requests.get(yjyg_url % (version, page), headers=header)
-        time.sleep(random.choice(range(1, 6)))
+        time.sleep(random.choice(range(3, 8)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
         logging.info(yjyg_url % (version, page))
@@ -78,14 +78,14 @@ for version in versions:
                 multi_add(PreAnalysisStocks, data)
                 data = []
         page += 1
-        time.sleep(random.choice(range(2, 5)))
+        time.sleep(random.choice(range(3, 8)))
 
     page = 1
     singal = True
     data = []
     while singal:
         res = requests.get(yjgg_url % (version, page), headers=header)
-        time.sleep(random.choice(range(1, 6)))
+        time.sleep(random.choice(range(3, 8)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
         logging.info(yjgg_url % (version, page))
@@ -113,14 +113,14 @@ for version in versions:
                 multi_add(PreAnalysisStocks, data)
                 data = []
         page += 1
-        time.sleep(random.choice(range(2, 5)))
+        time.sleep(random.choice(range(3, 8)))
 
     page = 1
     singal = True
     data = []
     while singal:
         res = requests.get(yjkb_url % (version, page), headers=header)
-        time.sleep(random.choice(range(1, 6)))
+        time.sleep(random.choice(range(3, 8)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
         logging.info(yjkb_url % (version, page))
@@ -148,4 +148,4 @@ for version in versions:
                 multi_add(PreAnalysisStocks, data)
                 data = []
         page += 1
-        time.sleep(random.choice(range(2, 5)))
+        time.sleep(random.choice(range(3, 8)))
