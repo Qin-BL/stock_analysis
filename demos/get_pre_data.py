@@ -15,6 +15,7 @@ import logging
 
 yjyg_url = 'http://data.10jqka.com.cn/ajax/yjyg/date/%s/board/ALL/field/enddate/order/desc/page/%s/ajax/1/free/1/'
 yjgg_url = 'http://data.10jqka.com.cn/ajax/yjgg/date/%s/board/ALL/field/DECLAREDATE/order/desc/page/%s/ajax/1/free/1/'
+yjkb_url = 'http://data.10jqka.com.cn/ajax/yjkb/date/%s/board/ALL/field/declaredate/order/desc/page/%s/ajax/1/free/1/'
 index_url = 'http://data.10jqka.com.cn/financial/yjyg/'
 header = {
     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
@@ -114,3 +115,37 @@ for version in versions:
         page += 1
         time.sleep(random.choice(range(2, 5)))
 
+    page = 1
+    singal = True
+    data = []
+    while singal:
+        res = requests.get(yjkb_url % (version, page), headers=header)
+        time.sleep(random.choice(range(1, 6)))
+        html = etree.HTML(res.content.decode('gbk'))
+        tr_list = html.xpath('/html/body/table/tbody/tr')
+        logging.info(yjkb_url % (version, page))
+        logging.info(len(tr_list))
+        if len(tr_list) == 0:
+            multi_add(PreAnalysisStocks, data)
+            logging.info(res.text)
+            break
+        for tr in tr_list:
+            tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
+            tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
+            if tmp_day < yesterday:
+                multi_add(PreAnalysisStocks, data)
+                singal = False
+                break
+            data.append({
+                'code': tmp[1],
+                'name': tmp[2],
+                'detials': '',
+                'extent': tmp[8],
+                'notice_time': tmp[3],
+                'status': 1
+            })
+            if len(data) > 100:
+                multi_add(PreAnalysisStocks, data)
+                data = []
+        page += 1
+        time.sleep(random.choice(range(2, 5)))
