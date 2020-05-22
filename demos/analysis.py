@@ -97,8 +97,9 @@ header = {
     'Referer': 'http://stockpage.10jqka.com.cn/realHead_v2.html'
 }
 
+
 def get_last_price(code):
-    data = requests.get(url % code, headers=header).content.decode()
+    data = requests.get(url % str(code), headers=header).content.decode()
     res = eval(data.split('_last(')[-1][:-1])
     return {
         'heighest_price': res['items']['8'],  # 最高
@@ -115,7 +116,7 @@ data_jump = []
 data_up = []
 res_set = set()
 for i in all_data:
-    code = i['code']
+    code = str(i['code'])
     logging.info(code)
     if code in res_set:
         continue
@@ -166,3 +167,4 @@ res = '跳空：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in 
       '\n上涨：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_up])
 mail(res)
 del_all_pre_data()
+
