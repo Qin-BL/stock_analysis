@@ -115,6 +115,7 @@ all_data = get_all_pre_data()
 data_jump = []
 data_up = []
 res_set = set()
+err_set = set()
 for i in all_data:
     code = str(i['code'])
     logging.info(code)
@@ -126,6 +127,7 @@ for i in all_data:
         logging.error(code)
         logging.error(e)
         res_set.add(code)
+        err_set.add(code)
         continue
     try:
        float(last_price['mini_price'])
@@ -135,6 +137,7 @@ for i in all_data:
        logging.error(last_price['mini_price'])
        logging.error(last_price['yes_finish_price'])
        res_set.add(code)
+       err_set.add(code)
        continue
     if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
         data_jump.append({
@@ -165,7 +168,7 @@ data_jump.sort(key=lambda x: x["range"], reverse=True)
 data_up.sort(key=lambda x: x["range"], reverse=True)
 res = '跳空：' + '\n'.join(set(['\n%s，%s，%s；' % (i['code'], i['name'], i['range']) for i in data_jump])) + \
       '\n上涨：' + '\n'.join(set(['\n%s，%s，%s；' % (i['code'], i['name'], i['range']) for i in data_up])) + \
-      '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
+      '\n错误：' + '\n'.join(['\n%s；' % i for i in err_set])
 mail(res)
 del_all_pre_data()
 
