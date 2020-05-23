@@ -163,8 +163,8 @@ logging.warning('finish,all is %d' % len(data_jump))
 # multi_add(AnalysisedStocks, data_jump)
 data_jump.sort(key=lambda x: x["range"], reverse=True)
 data_up.sort(key=lambda x: x["range"], reverse=True)
-res = '跳空：' + '\n'.join(['\n%s，%s，%s；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
-      '\n上涨：' + '\n'.join(['\n%s，%s，%s；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
+res = '跳空：' + '\n'.join(set(['\n%s，%s，%s；' % (i['code'], i['name'], i['range']) for i in data_jump])) + \
+      '\n上涨：' + '\n'.join(set(['\n%s，%s，%s；' % (i['code'], i['name'], i['range']) for i in data_up])) + \
       '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
 mail(res)
 del_all_pre_data()
