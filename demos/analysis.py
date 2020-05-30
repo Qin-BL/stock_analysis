@@ -89,6 +89,9 @@ from mysql.stock import get_all_pre_data, multi_add, del_pre_data, del_all_pre_d
 from mysql.models import AnalysisedStocks
 from lib.send_mail import mail
 from lib.to_html import get_html_msg
+import datetime
+import tushare
+from settings import all_holiday
 
 
 url = 'http://d.10jqka.com.cn/v2/realhead/hs_%s/last.js'
@@ -112,66 +115,73 @@ def get_last_price(code):
     }
 
 
-all_data = get_all_pre_data()
-data_jump = []
-data_up = []
-res_set = set()
-for i in all_data:
-    code = str(i['code'])
-    logging.info(code)
-    if code in res_set:
-        continue
-    try:
-        last_price = get_last_price(code)
-    except Exception as e:
-        logging.error(code)
-        logging.error(e)
+def main():
+    all_data = get_all_pre_data()
+    data_jump = []
+    data_up = []
+    res_set = set()
+    for i in all_data:
+        code = str(i['code'])
+        logging.info(code)
+        if code in res_set:
+            continue
+        try:
+            last_price = get_last_price(code)
+        except Exception as e:
+            logging.error(code)
+            logging.error(e)
+            res_set.add(code)
+            continue
+        try:
+           float(last_price['mini_price'])
+           float(last_price['finish_price'])
+           float(last_price['yes_finish_price'])
+        except:
+           logging.error(last_price['mini_price'])
+           logging.error(last_price['yes_finish_price'])
+           res_set.add(code)
+           continue
+        if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
+            data_jump.append({
+                'code': code,
+                'name': i['name'],
+                'detials': i['detials'],
+                'extent': i['extent'],
+                'mark': 0,
+                'notice_time': i['notice_time'],
+                "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(
+                    last_price['yes_finish_price']) * 100
+            })
+            continue
+        if float(last_price['finish_price']) > float(last_price['yes_finish_price']):
+            data_up.append({
+                'code': code,
+                'name': i['name'],
+                'detials': i['detials'],
+                'extent': i['extent'],
+                'mark': 0,
+                'notice_time': i['notice_time'],
+                "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(
+                    last_price['yes_finish_price']) * 100
+            })
+        time.sleep(random.choice(range(2, 6)))
         res_set.add(code)
-        continue
-    try:
-       float(last_price['mini_price'])
-       float(last_price['finish_price'])
-       float(last_price['yes_finish_price'])
-    except:
-       logging.error(last_price['mini_price'])
-       logging.error(last_price['yes_finish_price'])
-       res_set.add(code)
-       continue
-    if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
-        data_jump.append({
-            'code': code,
-            'name': i['name'],
-            'detials': i['detials'],
-            'extent': i['extent'],
-            'mark': 0,
-            'notice_time': i['notice_time'],
-            "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(
-                last_price['yes_finish_price']) * 100
-        })
-        continue
-    if float(last_price['finish_price']) > float(last_price['yes_finish_price']):
-        data_up.append({
-            'code': code,
-            'name': i['name'],
-            'detials': i['detials'],
-            'extent': i['extent'],
-            'mark': 0,
-            'notice_time': i['notice_time'],
-            "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(
-                last_price['yes_finish_price']) * 100
-        })
-    time.sleep(random.choice(range(2, 6)))
-    res_set.add(code)
-logging.warning('finish,all is %d' % len(data_jump))
-# multi_add(AnalysisedStocks, data_jump)
-data_jump.sort(key=lambda x: x["range"], reverse=True)
-data_up.sort(key=lambda x: x["range"], reverse=True)
-all_up = data_jump + data_up
-all_up.sort(key=lambda x: x["range"], reverse=True)
-res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
-      '\n上涨：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
-      '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
-mail(res)
-mail(get_html_msg(all_up))
-del_all_pre_data()
+    logging.warning('finish,all is %d' % len(data_jump))
+    # multi_add(AnalysisedStocks, data_jump)
+    data_jump.sort(key=lambda x: x["range"], reverse=True)
+    data_up.sort(key=lambda x: x["range"], reverse=True)
+    all_up = data_jump + data_up
+    all_up.sort(key=lambda x: x["range"], reverse=True)
+    res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
+          '\n上涨：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
+          '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
+    mail(res)
+    mail(get_html_msg(all_up))
+    mail(get_html_msg(all_up), False)
+    del_all_pre_data()
 
+
+if __name__ == '__main__':
+    # 判断当前是否为交易日
+    if datetime.date.today().strftime('%Y-%m-%d') not in all_holiday:
+        main()

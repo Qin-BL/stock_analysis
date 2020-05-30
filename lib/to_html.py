@@ -111,7 +111,6 @@ def get_html_msg(up_list):
                     <tr style="text-align: right;">
                       <th>代码</th>
                       <th>名称</th>
-                      <th>详情</th>
                       <th>公告时间</th>
                       <th>涨幅</th>
                     </tr>
@@ -122,8 +121,8 @@ def get_html_msg(up_list):
                 </table>"""
     all_tr = ''
     for i in up_list:
-        all_tr += '<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td style="color: red;">%.2f%%</td></tr>' % \
-                  (i['code'], i['name'], i['detials'], i['notice_time'], i['range'])
+        all_tr += '<tr><td>%s</td><td>%s</td><td>%s</td><td style="color: red;">%.2f%%</td></tr>' % \
+                  (i['code'], i['name'], i['notice_time'], i['range'])
     html_msg = "<html>" + head + body.format(df_html=tb_html % all_tr) + "</html>"
     return html_msg
 

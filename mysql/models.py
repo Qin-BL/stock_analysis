@@ -59,16 +59,16 @@ class AnalysisedStocks(Base):
     update_time = Column(DateTime, server_default=func.now(), onupdate=func.now(), comment="加入时间")
 
 
-# class User(Base):
-#
-#     """用户"""
-#
-#     __tablename__ = 'user'
-#
-#     id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
-#     email = Column(VARCHAR(128), nullable=False, comment='邮箱')
-#     create_time = Column(DateTime, server_default=func.now(), comment="创建时间")
-#     expire_time =
+class User(Base):
+
+    """用户"""
+
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
+    email = Column(VARCHAR(128), nullable=False, comment='邮箱')
+    create_time = Column(DateTime, server_default=func.now(), comment="创建时间")
+    times = Column(Integer, nullable=False, default=0, comment="购买的权益次数")
 
 
 # 创建表
