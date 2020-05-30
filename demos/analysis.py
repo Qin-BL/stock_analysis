@@ -88,6 +88,7 @@ import requests
 from mysql.stock import get_all_pre_data, multi_add, del_pre_data, del_all_pre_data
 from mysql.models import AnalysisedStocks
 from lib.send_mail import mail
+from lib.to_html import get_html_msg
 
 
 url = 'http://d.10jqka.com.cn/v2/realhead/hs_%s/last.js'
@@ -97,8 +98,9 @@ header = {
     'Referer': 'http://stockpage.10jqka.com.cn/realHead_v2.html'
 }
 
+
 def get_last_price(code):
-    data = requests.get(url % code, headers=header).content.decode()
+    data = requests.get(url % str(code), headers=header).content.decode()
     res = eval(data.split('_last(')[-1][:-1])
     return {
         'heighest_price': res['items']['8'],  # 最高
@@ -115,7 +117,7 @@ data_jump = []
 data_up = []
 res_set = set()
 for i in all_data:
-    code = i['code']
+    code = str(i['code'])
     logging.info(code)
     if code in res_set:
         continue
@@ -143,7 +145,8 @@ for i in all_data:
             'extent': i['extent'],
             'mark': 0,
             'notice_time': i['notice_time'],
-            "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(last_price['yes_finish_price'])
+            "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(
+                last_price['yes_finish_price']) * 100
         })
         continue
     if float(last_price['finish_price']) > float(last_price['yes_finish_price']):
@@ -154,7 +157,8 @@ for i in all_data:
             'extent': i['extent'],
             'mark': 0,
             'notice_time': i['notice_time'],
-            "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(last_price['yes_finish_price'])
+            "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(
+                last_price['yes_finish_price']) * 100
         })
     time.sleep(random.choice(range(2, 6)))
     res_set.add(code)
@@ -162,7 +166,10 @@ logging.warning('finish,all is %d' % len(data_jump))
 # multi_add(AnalysisedStocks, data_jump)
 data_jump.sort(key=lambda x: x["range"], reverse=True)
 data_up.sort(key=lambda x: x["range"], reverse=True)
-res = '跳空：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_jump]) + \
-      '\n上涨：' + '\n'.join(['\n%s，%s；' % (i['code'], i['name']) for i in data_up])
+all_up = list(set(data_jump + data_up)).sort(key=lambda x: x["range"], reverse=True)
+res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
+      '\n上涨：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
+      '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
 mail(res)
+mail(get_html_msg(all_up), False)
 del_all_pre_data()
