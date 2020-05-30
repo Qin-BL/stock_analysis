@@ -10,7 +10,7 @@ from email.utils import formataddr
 my_sender = '2528756899@qq.com'  # 发件人邮箱账号
 my_pass = 'gwzsdcguoxgudife'  # 发件人邮箱密码
 my_user = '2528756899@qq.com'  # 收件人邮箱账号
-to_addrs = []
+to_addrs = ['2901710298@qq.com', '15010993510@163.com']
 
 
 def mail(text, tomaster=True):
