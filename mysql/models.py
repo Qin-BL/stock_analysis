@@ -1,6 +1,7 @@
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, TIMESTAMP, func, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.dialects.mysql import DATETIME
 from lib.mysql_session import engine
 
 
@@ -56,6 +57,18 @@ class AnalysisedStocks(Base):
     mark = Column(Integer, nullable=False, index=True, comment='变化幅度')
     notice_time = Column(VARCHAR(128), nullable=False, comment='公告时间')
     update_time = Column(DateTime, server_default=func.now(), onupdate=func.now(), comment="加入时间")
+
+
+# class User(Base):
+#
+#     """用户"""
+#
+#     __tablename__ = 'user'
+#
+#     id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
+#     email = Column(VARCHAR(128), nullable=False, comment='邮箱')
+#     create_time = Column(DateTime, server_default=func.now(), comment="创建时间")
+#     expire_time =
 
 
 # 创建表
