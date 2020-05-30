@@ -126,3 +126,4 @@ def get_html_msg(up_list):
                   (i['code'], i['name'], i['detials'], i['notice_time'], i['range'])
     html_msg = "<html>" + head + body.format(df_html=tb_html % all_tr) + "</html>"
     return html_msg
+

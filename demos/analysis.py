@@ -171,5 +171,6 @@ res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], 
       '\n上涨：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
       '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
 mail(res)
-mail(get_html_msg(all_up), False)
+mail(get_html_msg(all_up))
 del_all_pre_data()
+
