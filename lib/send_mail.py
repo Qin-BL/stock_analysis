@@ -7,15 +7,15 @@ import logging
 from email.mime.text import MIMEText
 from email.utils import formataddr
 from email.header import Header
-from mysql.user import get_all_receiver, update_user_time
+from mysql.user import update_user_time
 
 my_sender = '2528756899@qq.com'  # 发件人邮箱账号
 my_pass = 'gwzsdcguoxgudife'  # 发件人邮箱密码
 my_user = '2528756899@qq.com'  # 收件人邮箱账号
-recvs = get_all_receiver()
+# recvs = get_all_receiver()
 
 
-def mail(text, tomaster=True):
+def mail(text, recv, tomaster=True):
     ret = True
     try:
         msg = MIMEText(text, 'html', 'utf-8')
@@ -31,10 +31,9 @@ def mail(text, tomaster=True):
             server.sendmail(my_sender, [my_user, ], msg.as_string())  # 括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
             server.quit()
         else:
-            for recv in recvs:
-                msg['To'] = formataddr(["", recv.email])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
-                server.sendmail(my_sender, [recv.email, ], msg.as_string())
-                update_user_time(recv)
+            msg['To'] = formataddr(["", recv.email])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
+            server.sendmail(my_sender, [recv.email, ], msg.as_string())
+            update_user_time(recv)
         server.quit()  # 关闭连接
     except Exception as e:  # 如果 try 中的语句没有执行，则会执行下面的 ret=False
         logging.error(traceback.format_exc())

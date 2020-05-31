@@ -92,6 +92,7 @@ from lib.to_html import get_html_msg
 import datetime
 import tushare
 from settings import all_holiday
+from mysql.user import get_all_receiver
 
 
 url = 'http://d.10jqka.com.cn/v2/realhead/hs_%s/last.js'
@@ -177,9 +178,10 @@ def main():
           '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
     st_time = time.time()
     logging.info('start send mail:%s' % st_time)
-    mail(res)
+    mail(res, '')
     # mail(get_html_msg(all_up), False)
-    mail(get_html_msg(all_up), False)
+    for recv in get_all_receiver():
+        mail(get_html_msg(all_up), recv, False)
     w_time = time.time() - st_time
     logging.info('end send mail:%s' % w_time)
     del_all_pre_data()
