@@ -29,7 +29,6 @@ def mail(text, recv, tomaster=True):
         if tomaster:
             msg['To'] = formataddr(["my", my_user])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
             server.sendmail(my_sender, [my_user, ], msg.as_string())  # 括号中对应的是发件人邮箱账号、收件人邮箱账号、发送邮件
-            server.quit()
         else:
             msg['To'] = formataddr(["", recv.email])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
             server.sendmail(my_sender, [recv.email, ], msg.as_string())
