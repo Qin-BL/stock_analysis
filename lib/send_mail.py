@@ -19,6 +19,8 @@ def mail(text, tomaster=True):
     ret = True
     try:
         msg = MIMEText(text, 'html', 'utf-8')
+        if tomaster:
+            msg = MIMEText(text, 'plain', 'utf-8')
         # msg['From'] = formataddr(["stock_analysis", my_sender])  # 括号里的对应发件人邮箱昵称、发件人邮箱账号
         msg['From'] = Header("业绩分析", 'utf-8')  # 括号里的对应发件人邮箱昵称、发件人邮箱账号
         msg['Subject'] = "因业绩公告上涨的股票"  # 邮件的主题，也可以说是标题
