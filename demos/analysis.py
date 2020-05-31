@@ -178,7 +178,7 @@ def main():
     st_time = time.time()
     logging.info('start send mail:%s' % st_time)
     mail(res)
-    mail(get_html_msg(all_up))
+    # mail(get_html_msg(all_up), False)
     mail(get_html_msg(all_up), False)
     w_time = time.time() - st_time
     logging.info('end send mail:%s' % w_time)
