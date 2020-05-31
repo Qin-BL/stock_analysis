@@ -175,9 +175,13 @@ def main():
     res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
           '\n上涨：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
           '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
+    st_time = time.time()
+    logging.info('start send mail:%s' % st_time)
     mail(res)
     mail(get_html_msg(all_up))
     mail(get_html_msg(all_up), False)
+    w_time = time.time() - st_time
+    logging.info('end send mail:%s' % w_time)
     del_all_pre_data()
 
 
