@@ -184,7 +184,7 @@ def main():
         mail(get_html_msg(all_up), recv, False)
     w_time = time.time() - st_time
     logging.info('end send mail:%s' % w_time)
-    mail(w_time, '')
+    mail('%s' % w_time, '')
     del_all_pre_data()
 
 
