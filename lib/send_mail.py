@@ -30,7 +30,7 @@ def mail(text, tomaster=True):
         else:
             for recv in recvs:
                 msg['To'] = formataddr(["my", recv.email])  # 括号里的对应收件人邮箱昵称、收件人邮箱账号
-                server.sendmail(my_sender, [recv, ], msg.as_string())
+                server.sendmail(my_sender, [recv.email, ], msg.as_string())
                 update_user_time(recv)
         server.quit()  # 关闭连接
     except Exception as e:  # 如果 try 中的语句没有执行，则会执行下面的 ret=False
