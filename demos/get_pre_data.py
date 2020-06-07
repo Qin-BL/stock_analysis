@@ -63,7 +63,7 @@ for version in versions:
             'https': 'http://%s:%s' % (proxy.ip, proxy.port)
         }
         try:
-            index_html = etree.HTML(requests.get(index_url, headers=gen_header(), proxies=proxies, timeout=100).content.decode('gbk'))
+            index_html = etree.HTML(requests.get(index_url, headers=gen_header(), proxies=proxies, timeout=30).content.decode('gbk'))
             if 'Nginx forbidden' not in index_html:
                 break
             else:
@@ -83,7 +83,7 @@ for version in versions:
                 'https': 'http://%s:%s' % (proxy.ip, proxy.port)
             }
             try:
-                res = requests.get(yjyg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=100)
+                res = requests.get(yjyg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=30)
                 if 'Nginx forbidden' not in index_html:
                     break
                 else:
@@ -131,7 +131,7 @@ for version in versions:
                 'https': 'http://%s:%s' % (proxy.ip, proxy.port)
             }
             try:
-                res = requests.get(yjgg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=100)
+                res = requests.get(yjgg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=30)
                 if 'Nginx forbidden' not in index_html:
                     break
                 else:
@@ -179,7 +179,7 @@ for version in versions:
                 'https': 'http://%s:%s' % (proxy.ip, proxy.port)
             }
             try:
-                res = requests.get(yjkb_url % (version, page), headers=gen_header(), proxies=proxies, timeout=100)
+                res = requests.get(yjkb_url % (version, page), headers=gen_header(), proxies=proxies, timeout=30)
                 if 'Nginx forbidden' not in index_html:
                     break
                 else:
