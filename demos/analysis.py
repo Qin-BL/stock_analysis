@@ -150,7 +150,7 @@ def main():
                 'extent': i['extent'],
                 'mark': 0,
                 'notice_time': i['notice_time'],
-                "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(
+                "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(
                     last_price['yes_finish_price']) * 100
             })
             res_set.add(code)
