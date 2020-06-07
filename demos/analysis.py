@@ -83,7 +83,7 @@ define('port', default=8888)
 define('debug', default=False)
 options.parse_command_line()
 
-import time, random, logging
+import time, random, logging, traceback
 import requests
 from mysql.stock import get_all_pre_data, multi_add, del_pre_data, del_all_pre_data
 from mysql.models import AnalysisedStocks
@@ -129,7 +129,7 @@ def main():
         try:
             last_price = get_last_price(code)
         except Exception as e:
-            logging.error(code)
+            logging.error(traceback.format_exc())
             logging.error(e)
             res_set.add(code)
             continue
@@ -140,6 +140,7 @@ def main():
         except:
            logging.error(last_price['mini_price'])
            logging.error(last_price['yes_finish_price'])
+           logging.error(traceback.format_exc())
            res_set.add(code)
            continue
         if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
@@ -167,7 +168,7 @@ def main():
                     last_price['yes_finish_price']) * 100
             })
         res_set.add(code)
-        time.sleep(random.choice(range(2, 6)))
+        time.sleep(random.choice(range(2, 8)))
     logging.warning('finish,all is %d' % len(data_jump))
     # multi_add(AnalysisedStocks, data_jump)
     # 去重
