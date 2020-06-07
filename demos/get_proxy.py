@@ -17,12 +17,12 @@ i = 1
 res = []
 while True:
     html = etree.HTML(requests.get(url % str(i)).content.decode('gbk'))
-    tr_list = html.xpath('//*[@id="main"]/div/div[1]/table/tbody/tr')[1:]
+    tr_list = html.xpath('//div[@id="main"]//table//tr')[1:]
     if not len(tr_list):
         break
     for tr in tr_list:
-        ip = tr.xpath('./td[1]/text()')
-        port = tr.xpath('./td[2]/text()')
+        ip = tr.xpath('.//text()')[0]
+        port = tr.xpath('.//text()')[1]
         proxies = {
             'http': 'http://%s:%s' % (ip, port),
             'https': 'http://%s:%s' % (ip, port)
@@ -32,5 +32,8 @@ while True:
                 'ip': ip,
                 'port': port
             })
+    if len(res) > 100:
+        multi_add(Proxys, res)
+        res = []
     i += 1
 multi_add(Proxys, res)
