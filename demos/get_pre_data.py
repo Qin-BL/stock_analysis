@@ -84,7 +84,7 @@ for version in versions:
             }
             try:
                 res = requests.get(yjyg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=30)
-                if 'Nginx forbidden' not in index_html:
+                if 'Nginx forbidden' not in res.text:
                     break
                 else:
                     del_proxy(proxy.id)
@@ -132,7 +132,7 @@ for version in versions:
             }
             try:
                 res = requests.get(yjgg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=30)
-                if 'Nginx forbidden' not in index_html:
+                if 'Nginx forbidden' not in res.text:
                     break
                 else:
                     del_proxy(proxy.id)
@@ -180,7 +180,7 @@ for version in versions:
             }
             try:
                 res = requests.get(yjkb_url % (version, page), headers=gen_header(), proxies=proxies, timeout=30)
-                if 'Nginx forbidden' not in index_html:
+                if 'Nginx forbidden' not in res.text:
                     break
                 else:
                     del_proxy(proxy.id)
