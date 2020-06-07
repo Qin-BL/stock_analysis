@@ -75,7 +75,7 @@ class Proxys(Base):
 
     """代理"""
 
-    __tablename__ = 'proxy.py'
+    __tablename__ = 'proxy'
 
     id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
     ip = Column(VARCHAR(128), nullable=False, comment='ip')
