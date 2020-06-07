@@ -168,7 +168,7 @@ def main():
                     last_price['yes_finish_price']) * 100
             })
         res_set.add(code)
-        time.sleep(random.choice(range(2, 8)))
+        time.sleep(random.choice(range(5, 8)))
     logging.warning('finish,all is %d' % len(data_jump))
     # multi_add(AnalysisedStocks, data_jump)
     # 去重
