@@ -96,15 +96,27 @@ from mysql.user import get_all_receiver
 
 
 url = 'http://d.10jqka.com.cn/v2/realhead/hs_%s/last.js'
-header = {
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
-    'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma',
-    'Referer': 'http://stockpage.10jqka.com.cn/realHead_v2.html'
-}
+# header = {
+#     'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
+#     'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma',
+#     'Referer': 'http://stockpage.10jqka.com.cn/realHead_v2.html'
+# }
+user_agents = ['Mozilla/5.0 (Windows NT 6.2; WOW64; rv:21.0) Gecko/20100101 Firefox/21.0',
+               'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36',
+               'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
+               'Mozilla/5.0 (Android; Mobile; rv:14.0) Gecko/14.0 Firefox/14.0']
+
+
+def gen_header():
+    return {
+        'user-agent': random.choice(user_agents),
+        'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma',
+        'Referer': 'http://stockpage.10jqka.com.cn/realHead_v2.html'
+    }
 
 
 def get_last_price(code):
-    data = requests.get(url % str(code), headers=header).content.decode()
+    data = requests.get(url % str(code), headers=gen_header()).content.decode()
     res = eval(data.split('_last(')[-1][:-1])
     return {
         'heighest_price': res['items']['8'],  # 最高
