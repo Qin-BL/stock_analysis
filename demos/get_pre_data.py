@@ -10,17 +10,33 @@ import requests
 from lxml import etree
 from mysql.stock import multi_add
 from mysql.models import PreAnalysisStocks
-import logging
+from mysql.proxy import get_all_proxys, del_proxy
+import logging, traceback
+from settings import user_agents
 
 
 yjyg_url = 'http://data.10jqka.com.cn/ajax/yjyg/date/%s/board/ALL/field/enddate/order/desc/page/%s/ajax/1/free/1/'
 yjgg_url = 'http://data.10jqka.com.cn/ajax/yjgg/date/%s/board/ALL/field/DECLAREDATE/order/desc/page/%s/ajax/1/free/1/'
 yjkb_url = 'http://data.10jqka.com.cn/ajax/yjkb/date/%s/board/ALL/field/declaredate/order/desc/page/%s/ajax/1/free/1/'
 index_url = 'http://data.10jqka.com.cn/financial/yjyg/'
-header = {
-    'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11',
-    'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma'
-}
+
+
+def gen_header():
+    return {
+        'user-agent': random.choice(user_agents),
+        'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma'
+    }
+
+
+# def gen_proxy():
+#     return random.choice(get_all_proxys())
+    # ip = proxy.ip
+    # port = proxy.port
+    # return {
+    #     'http': 'http://%s:%s' % (ip, port),
+    #     'https': 'http://%s:%s' % (ip, port)
+    # }
+
 
 # proxies = []
 versions = []
@@ -41,15 +57,40 @@ for version in versions:
     page = 1
     data = []
     singal = True
-
-    index_html = etree.HTML(requests.get(index_url, headers=header).content.decode('gbk'))
+    for proxy in get_all_proxys():
+        proxies = {
+            'http': 'http://%s:%s' % (proxy.ip, proxy.port),
+            'https': 'http://%s:%s' % (proxy.ip, proxy.port)
+        }
+        try:
+            index_html = etree.HTML(requests.get(index_url, headers=gen_header(), proxies=proxies, timeout=100).content.decode('gbk'))
+            if 'Nginx forbidden' not in index_html:
+                break
+            else:
+                del_proxy(proxy.id)
+        except:
+            logging.error(traceback.format_exc())
+            del_proxy(proxy.id)
     time.sleep(random.choice(range(3, 8)))
     today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
     yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
     logging.info(today)
 
     while singal:
-        res = requests.get(yjyg_url % (version, page), headers=header)
+        for proxy in get_all_proxys():
+            proxies = {
+                'http': 'http://%s:%s' % (proxy.ip, proxy.port),
+                'https': 'http://%s:%s' % (proxy.ip, proxy.port)
+            }
+            try:
+                res = requests.get(yjyg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=100)
+                if 'Nginx forbidden' not in index_html:
+                    break
+                else:
+                    del_proxy(proxy.id)
+            except:
+                logging.error(traceback.format_exc())
+                del_proxy(proxy.id)
         time.sleep(random.choice(range(3, 8)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
@@ -84,7 +125,20 @@ for version in versions:
     singal = True
     data = []
     while singal:
-        res = requests.get(yjgg_url % (version, page), headers=header)
+        for proxy in get_all_proxys():
+            proxies = {
+                'http': 'http://%s:%s' % (proxy.ip, proxy.port),
+                'https': 'http://%s:%s' % (proxy.ip, proxy.port)
+            }
+            try:
+                res = requests.get(yjgg_url % (version, page), headers=gen_header(), proxies=proxies, timeout=100)
+                if 'Nginx forbidden' not in index_html:
+                    break
+                else:
+                    del_proxy(proxy.id)
+            except:
+                logging.error(traceback.format_exc())
+                del_proxy(proxy.id)
         time.sleep(random.choice(range(3, 8)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
@@ -119,7 +173,20 @@ for version in versions:
     singal = True
     data = []
     while singal:
-        res = requests.get(yjkb_url % (version, page), headers=header)
+        for proxy in get_all_proxys():
+            proxies = {
+                'http': 'http://%s:%s' % (proxy.ip, proxy.port),
+                'https': 'http://%s:%s' % (proxy.ip, proxy.port)
+            }
+            try:
+                res = requests.get(yjkb_url % (version, page), headers=gen_header(), proxies=proxies, timeout=100)
+                if 'Nginx forbidden' not in index_html:
+                    break
+                else:
+                    del_proxy(proxy.id)
+            except:
+                logging.error(traceback.format_exc())
+                del_proxy(proxy.id)
         time.sleep(random.choice(range(3, 8)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')

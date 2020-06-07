@@ -71,6 +71,17 @@ class User(Base):
     times = Column(Integer, nullable=False, default=0, comment="购买的权益次数")
 
 
+class Proxys(Base):
+
+    """代理"""
+
+    __tablename__ = 'proxy.py'
+
+    id = Column(Integer, primary_key=True, autoincrement=True, comment='id')
+    ip = Column(VARCHAR(128), nullable=False, comment='ip')
+    port = Column(Integer, nullable=False, default=80, comment="port")
+
+
 # 创建表
 Base.metadata.create_all(engine)
 
