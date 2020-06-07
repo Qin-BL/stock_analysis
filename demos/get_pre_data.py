@@ -71,7 +71,7 @@ for version in versions:
         except:
             logging.error(traceback.format_exc())
             del_proxy(proxy.id)
-    time.sleep(random.choice(range(3, 8)))
+    time.sleep(random.choice(range(2, 6)))
     today = index_html.xpath('//*[@id="J-ajax-main"]/table/tbody/tr[1]/td[8]')[0].text
     yesterday = datetime.datetime.strptime(today, '%Y-%m-%d')-datetime.timedelta(days=1)
     logging.info(today)
@@ -91,7 +91,7 @@ for version in versions:
             except:
                 logging.error(traceback.format_exc())
                 del_proxy(proxy.id)
-        time.sleep(random.choice(range(3, 8)))
+        time.sleep(random.choice(range(2, 6)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
         logging.info(yjyg_url % (version, page))
@@ -119,7 +119,7 @@ for version in versions:
                 multi_add(PreAnalysisStocks, data)
                 data = []
         page += 1
-        time.sleep(random.choice(range(3, 8)))
+        time.sleep(random.choice(range(2, 6)))
 
     page = 1
     singal = True
@@ -139,7 +139,7 @@ for version in versions:
             except:
                 logging.error(traceback.format_exc())
                 del_proxy(proxy.id)
-        time.sleep(random.choice(range(3, 8)))
+        time.sleep(random.choice(range(2, 6)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
         logging.info(yjgg_url % (version, page))
@@ -167,7 +167,7 @@ for version in versions:
                 multi_add(PreAnalysisStocks, data)
                 data = []
         page += 1
-        time.sleep(random.choice(range(3, 8)))
+        time.sleep(random.choice(range(2, 6)))
 
     page = 1
     singal = True
@@ -187,7 +187,7 @@ for version in versions:
             except:
                 logging.error(traceback.format_exc())
                 del_proxy(proxy.id)
-        time.sleep(random.choice(range(3, 8)))
+        time.sleep(random.choice(range(2, 6)))
         html = etree.HTML(res.content.decode('gbk'))
         tr_list = html.xpath('/html/body/table/tbody/tr')
         logging.info(yjkb_url % (version, page))
@@ -215,4 +215,4 @@ for version in versions:
                 multi_add(PreAnalysisStocks, data)
                 data = []
         page += 1
-        time.sleep(random.choice(range(3, 8)))
+        time.sleep(random.choice(range(2, 6)))
