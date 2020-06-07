@@ -153,6 +153,7 @@ def main():
                 "range": (float(last_price['mini_price'])-float(last_price['yes_finish_price'])) / float(
                     last_price['yes_finish_price']) * 100
             })
+            res_set.add(code)
             continue
         if float(last_price['finish_price']) > float(last_price['yes_finish_price']):
             data_up.append({
@@ -165,18 +166,19 @@ def main():
                 "range": (float(last_price['finish_price'])-float(last_price['yes_finish_price'])) / float(
                     last_price['yes_finish_price']) * 100
             })
-        time.sleep(random.choice(range(2, 6)))
         res_set.add(code)
+        time.sleep(random.choice(range(2, 6)))
     logging.warning('finish,all is %d' % len(data_jump))
     # multi_add(AnalysisedStocks, data_jump)
     # 去重
-    data_jump = [dict(i) for i in set(tuple(j.items()) for j in data_jump)]
-    data_up = [dict(i) for i in set(tuple(j.items()) for j in data_up)]
+    # data_jump = [dict(i) for i in set(tuple(j.items()) for j in data_jump)]
+    # data_up = [dict(i) for i in set(tuple(j.items()) for j in data_up)]
     # 排序
     data_jump.sort(key=lambda x: x["range"], reverse=True)
     data_up.sort(key=lambda x: x["range"], reverse=True)
 
-    all_up = [dict(i) for i in set(tuple(j.items()) for j in (data_jump + data_up))]
+    # all_up = [dict(i) for i in set(tuple(j.items()) for j in (data_jump + data_up))]
+    all_up = data_jump + data_up
     all_up.sort(key=lambda x: x["range"], reverse=True)
 
     res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
