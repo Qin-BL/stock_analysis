@@ -1,3 +1,11 @@
+import os
+import sys
+sys.path.append(os.getcwd())
+from tornado.options import options, define
+define('port', default=8888)
+define('debug', default=False)
+options.parse_command_line()
+
 import requests
 from lxml import etree
 from mysql.stock import multi_add
