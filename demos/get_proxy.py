@@ -27,11 +27,14 @@ while True:
             'http': 'http://%s:%s' % (ip, port),
             'https': 'http://%s:%s' % (ip, port)
         }
-        if requests.get('http://www.baidu.com', proxies=proxies, timeout=20).status_code == 200:
-            res.append({
-                'ip': ip,
-                'port': port
-            })
+        try:
+            if requests.get('http://www.baidu.com', proxies=proxies, timeout=20).status_code == 200:
+                res.append({
+                    'ip': ip,
+                    'port': port
+                })
+        except:
+            pass
     if len(res) > 100:
         multi_add(Proxys, res)
         res = []
