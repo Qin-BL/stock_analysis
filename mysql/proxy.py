@@ -8,4 +8,5 @@ def get_all_proxys():
 
 
 def del_proxy(pid):
-    return session.query(Proxys).filter_by(id=pid).delete()
+    session.query(Proxys).filter_by(id=pid).delete()
+    session.commit()
