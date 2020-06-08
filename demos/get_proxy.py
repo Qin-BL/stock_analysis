@@ -10,11 +10,13 @@ import requests
 from lxml import etree
 from mysql.stock import multi_add
 from mysql.models import Proxys
+import logging
 
 
 url = 'http://www.66ip.cn/%s.html'
 i = 1
 res = []
+logging.info('starting...')
 while True:
     html = etree.HTML(requests.get(url % str(i)).content.decode('gbk'))
     tr_list = html.xpath('//div[@id="main"]//table//tr')[1:]
@@ -39,6 +41,7 @@ while True:
         multi_add(Proxys, res)
         res = []
     i += 1
+logging.info('ending...')
 multi_add(Proxys, res)
 
 
