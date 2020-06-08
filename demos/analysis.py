@@ -123,20 +123,22 @@ def gen_header():
 
 
 def get_last_price(code):
-    for proxy in get_all_proxys():
-        proxies = {
-            'http': 'http://%s:%s' % (proxy.ip, proxy.port),
-            'https': 'http://%s:%s' % (proxy.ip, proxy.port)
-        }
-        try:
-            data = requests.get(url % str(code), headers=gen_header(), proxies=proxies, timeout=30).content.decode()
-            if 'Nginx forbidden' not in data:
-                break
-            else:
+    data = requests.get(url % str(code), headers=gen_header(), proxies=proxies, timeout=30).content.decode()
+    if 'Nginx forbidden' in data:
+        for proxy in get_all_proxys():
+            proxies = {
+                'http': 'http://%s:%s' % (proxy.ip, proxy.port),
+                'https': 'http://%s:%s' % (proxy.ip, proxy.port)
+            }
+            try:
+                data = requests.get(url % str(code), headers=gen_header(), proxies=proxies, timeout=30).content.decode()
+                if 'Nginx forbidden' not in data:
+                    break
+                else:
+                    del_proxy(proxy.id)
+            except:
+                logging.error(traceback.format_exc())
                 del_proxy(proxy.id)
-        except:
-            logging.error(traceback.format_exc())
-            del_proxy(proxy.id)
     res = eval(data.split('_last(')[-1][:-1])
     return {
         'heighest_price': res['items']['8'],  # 最高
@@ -157,6 +159,7 @@ def main():
         code = str(i['code'])
         logging.info(code)
         if code in res_set:
+
             continue
         try:
             last_price = get_last_price(code)
