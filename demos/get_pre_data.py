@@ -157,7 +157,11 @@ for version in versions:
             break
         for tr in tr_list:
             tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
-            tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
+            try:
+                tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
+            except:
+                logging.error(traceback.format_exc())
+                tmp_day = '1995-01-23'
             if tmp_day < yesterday:
                 multi_add(PreAnalysisStocks, data)
                 singal = False
@@ -207,7 +211,11 @@ for version in versions:
             break
         for tr in tr_list:
             tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
-            tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
+            try:
+                tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
+            except:
+                logging.error(traceback.format_exc())
+                tmp_day = '1995-01-23'
             if tmp_day < yesterday:
                 multi_add(PreAnalysisStocks, data)
                 singal = False
