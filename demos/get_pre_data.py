@@ -211,7 +211,6 @@ for version in versions:
             break
         for tr in tr_list:
             tmp = [i.strip() for i in tr.xpath('.//text()') if i.strip()]
-
             try:
                 tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
             except:
