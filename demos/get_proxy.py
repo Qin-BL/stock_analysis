@@ -17,11 +17,13 @@ url = 'http://www.66ip.cn/%s.html'
 i = 1
 res = []
 logging.info('starting...')
-while True:
+while i<2003:
     html = etree.HTML(requests.get(url % str(i)).content.decode('gbk'))
     tr_list = html.xpath('//div[@id="main"]//table//tr')[1:]
+    logging.info(tr_list)
     if not len(tr_list):
-        break
+        i += 1
+        continue
     for tr in tr_list:
         ip = tr.xpath('.//text()')[0]
         port = tr.xpath('.//text()')[1]
