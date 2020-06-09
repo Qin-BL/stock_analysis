@@ -123,7 +123,7 @@ def gen_header():
 
 
 def get_last_price(code):
-    data = requests.get(url % str(code), headers=gen_header(), proxies=proxies, timeout=30).content.decode()
+    data = requests.get(url % str(code), headers=gen_header(), timeout=30).content.decode()
     if 'Nginx forbidden' in data:
         for proxy in get_all_proxys():
             proxies = {
