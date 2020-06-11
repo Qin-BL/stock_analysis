@@ -216,7 +216,7 @@ for version in versions:
                 tmp_day = datetime.datetime.strptime(tmp[3], '%Y-%m-%d')
             except:
                 logging.error(traceback.format_exc())
-                tmp_day = '1995-01-23'
+                tmp_day = datetime.datetime.strptime('1995-01-23', '%Y-%m-%d')
             if tmp_day < yesterday:
                 multi_add(PreAnalysisStocks, data)
                 singal = False
