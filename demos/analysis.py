@@ -132,6 +132,7 @@ def get_last_price(code):
             }
             try:
                 data = requests.get(url % str(code), headers=gen_header(), proxies=proxies, timeout=30).content.decode()
+                logging.info(data)
                 if 'Nginx forbidden' not in data:
                     break
                 else:
