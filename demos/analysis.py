@@ -170,6 +170,8 @@ def main():
             res_set.add(code)
             time.sleep(random.choice(range(5, 8)))
             continue
+        if not last_price['mini_price']:
+            continue
         try:
            float(last_price['mini_price'])
            float(last_price['finish_price'])
