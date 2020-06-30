@@ -156,6 +156,7 @@ def main():
     data_jump = []
     data_up = []
     res_set = set()
+    err_set = set()
     for i in all_data:
         code = str(i['code'])
         logging.info(code)
@@ -168,6 +169,7 @@ def main():
             logging.error(traceback.format_exc())
             logging.error(e)
             res_set.add(code)
+            err_set.add(code)
             time.sleep(random.choice(range(5, 8)))
             continue
         if not last_price['mini_price']:
@@ -181,6 +183,7 @@ def main():
            logging.error(last_price['yes_finish_price'])
            logging.error(traceback.format_exc())
            res_set.add(code)
+           err_set.add(code)
            time.sleep(random.choice(range(5, 8)))
            continue
         if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
@@ -225,7 +228,7 @@ def main():
 
     res = '跳空：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_jump]) + \
           '\n上涨：' + '\n'.join(['\n%s，%s，%.2f%%；' % (i['code'], i['name'], i['range']) for i in data_up]) + \
-          '\n错误：' + '\n'.join(['\n%s；' % i for i in res_set])
+          '\n错误：' + '\n'.join(['\n%s；' % i for i in err_set])
 
     st_time = time.time()
     logging.info('start send mail:%s' % st_time)
