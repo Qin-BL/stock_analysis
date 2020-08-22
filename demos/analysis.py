@@ -161,7 +161,7 @@ def main():
         code = str(i['code'])
         logging.info(code)
         if code in res_set:
-
+            time.sleep(radom.choice(range(9, 12)))
             continue
         try:
             last_price = get_last_price(code)
@@ -171,9 +171,10 @@ def main():
             res_set.add(code)
             if 'ST' not in i['name']:
                 err_set.add(code)
-            time.sleep(random.choice(range(5, 8)))
+            time.sleep(random.choice(range(9, 12)))
             continue
         if not last_price['mini_price']:
+            time.sleep(radom.choice(range(9, 12)))
             continue
         try:
            float(last_price['mini_price'])
@@ -186,7 +187,7 @@ def main():
            res_set.add(code)
            if 'ST' not in i['name']:
                err_set.add(code)
-           time.sleep(random.choice(range(5, 8)))
+           time.sleep(random.choice(range(9, 12)))
            continue
         if float(last_price['mini_price']) > float(last_price['yes_finish_price']):
             data_jump.append({
@@ -200,7 +201,7 @@ def main():
                     last_price['yes_finish_price']) * 100
             })
             res_set.add(code)
-            time.sleep(random.choice(range(5, 8)))
+            time.sleep(random.choice(range(9, 12)))
             continue
         if float(last_price['finish_price']) > float(last_price['yes_finish_price']):
             data_up.append({
@@ -214,7 +215,7 @@ def main():
                     last_price['yes_finish_price']) * 100
             })
         res_set.add(code)
-        time.sleep(random.choice(range(5, 8)))
+        time.sleep(random.choice(range(9, 12)))
     logging.warning('finish,all is %d' % len(data_jump))
     # multi_add(AnalysisedStocks, data_jump)
     # 去重
