@@ -161,7 +161,7 @@ def main():
         code = str(i['code'])
         logging.info(code)
         if code in res_set:
-            time.sleep(radom.choice(range(9, 12)))
+            time.sleep(random.choice(range(9, 12)))
             continue
         try:
             last_price = get_last_price(code)
@@ -169,12 +169,12 @@ def main():
             logging.error(traceback.format_exc())
             logging.error(e)
             res_set.add(code)
-            if 'ST' not in i['name']:
+            if 'ST' not in i['name'] and '退市' not in i['name']:
                 err_set.add(code)
             time.sleep(random.choice(range(9, 12)))
             continue
         if not last_price['mini_price']:
-            time.sleep(radom.choice(range(9, 12)))
+            time.sleep(random.choice(range(9, 12)))
             continue
         try:
            float(last_price['mini_price'])
@@ -185,7 +185,7 @@ def main():
            logging.error(last_price['yes_finish_price'])
            logging.error(traceback.format_exc())
            res_set.add(code)
-           if 'ST' not in i['name']:
+           if 'ST' not in i['name'] and '退市' not in i['name']:
                err_set.add(code)
            time.sleep(random.choice(range(9, 12)))
            continue
