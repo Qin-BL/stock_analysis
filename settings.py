@@ -19,7 +19,7 @@ DEFAULT_REDIS = {
 # 默认mysql
 mysql_master = {
     'user': 'root',
-    'password': 'qinbilei888',
+    'password': 'mz@123!#fdijkff89$',
     'host': '127.0.0.1',
     'port': 3306,
     # 'db': 'test'
