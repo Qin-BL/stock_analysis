@@ -117,7 +117,7 @@ def gen_proxy():
 def gen_header():
     return {
         'user-agent': random.choice(user_agents),
-        'Cookie': 'vvvv=1; v=Ardm1T-ZphfLuSKbWEGtBwF8RqACfIveZVAPUglk0wbtuNlWEUwbLnUgn6Ma',
+        'Cookie': 'Hm_lvt_60bad21af9c824a4a0530d5dbf4357ca=1623667598; Hm_lvt_78c58f01938e4d85eaf619eae71b4ed1=1623667598; Hm_lvt_f79b64788a4e377c608617fba4c736e2=1623667598; Hm_lpvt_60bad21af9c824a4a0530d5dbf4357ca=1623668329; Hm_lpvt_78c58f01938e4d85eaf619eae71b4ed1=1623668329; Hm_lpvt_f79b64788a4e377c608617fba4c736e2=1623668329; v=A5xs1QgQEGhBmuS0EPkwCZQ3bbFNFUIlwrhUFnadqrZqnTLnniUQzxLJJJDF',
         'Referer': 'http://stockpage.10jqka.com.cn/realHead_v2.html'
     }
 
